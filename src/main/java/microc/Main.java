@@ -2,6 +2,8 @@ package microc;
 
 import org.antlr.v4.runtime.*;
 import java.nio.file.Path;
+import microc.MicroCLexer;
+import microc.MicroCParser;
 
 public class Main {
 
@@ -35,7 +37,8 @@ public class Main {
 
         try {
             var tree = parser.translationUnit();
-            System.out.println(tree.toStringTree(parser));
+            new ChequeoSemantico().visit(tree);
+            System.out.println("Chequeo semántico OK");
         } catch (RuntimeException ex) {
             System.err.println(ex.getMessage());
             System.exit(1);
