@@ -2,8 +2,6 @@ package microc;
 
 import org.antlr.v4.runtime.*;
 import java.nio.file.Path;
-import microc.MicroCLexer;
-import microc.MicroCParser;
 
 public class Main {
 
@@ -14,6 +12,10 @@ public class Main {
         @Override
         public void syntaxError(Recognizer<?, ?> r, Object sym, int line,
                                 int col, String msg, RecognitionException e) {
+            if (sym instanceof Token t && t.getType() == MicroCLexer.UNCLOSED_COMMENT) {
+                throw new RuntimeException("Error LEXICO [" + t.getLine() + ":"
+                        + (t.getCharPositionInLine() + 1) + "] comentario sin cerrar");
+            }
             throw new RuntimeException(
                     "Error " + fase + " [" + line + ":" + (col + 1) + "] " + msg);
         }
